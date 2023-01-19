@@ -19,7 +19,7 @@ export const insertTodo = async (obj: Todo): Promise<void> => {
 
   todos.push(obj)
 
-  await saveJsonFile(todosPath, todos)
+  // await saveJsonFile(todosPath, todos)
 }
 export const selectTodoById = async (id: string): Promise<Todo | null> => {
   const todos = todoFromFile as Todo[]
@@ -44,7 +44,7 @@ export const alterTodo = async (id: string, todo: Todo): Promise<void> => {
   const index = todos.findIndex((item) => item.id === id)
   todos[index] = todo
 
-  await saveJsonFile(todosPath, todos)
+  // await saveJsonFile(todosPath, todos)
 }
 
 export const deleteTodo = async (id: string): Promise<void> => {
@@ -53,7 +53,7 @@ export const deleteTodo = async (id: string): Promise<void> => {
   const index = todos.findIndex((item) => item.id === id)
   todos.splice(index, 1)
 
-  await saveJsonFile(todosPath, todos)
+  // await saveJsonFile(todosPath, todos)
 }
 
 const sortAsc = (a: any, b: any) => {

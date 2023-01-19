@@ -1,25 +1,25 @@
-import { saveJsonFile } from "@/libs/file";
+import { readJsonFile, saveJsonFile } from "@/libs/file";
 import { User } from "@/models/user";
-import usersFromFile from "./storages/users.json"
-import path from "path";
+// import usersFromFile from "../../tmp/storages/users.json"
 
 
-const usersPath = path.join(process.cwd(), 'src/repositories/storages/users.json')
+const usersPath = '/tmp/storages'
+const usersName = 'users.json'
 
 export const selectUsers = async (): Promise<User[]> => {
-  const users = usersFromFile as User[]
+  const users = await readJsonFile<User[]>(usersPath)
 
   return users
 }
 export const insertUser = async (user: User): Promise<void> => {
-  const users = usersFromFile as User[]
+  const users = await readJsonFile<User[]>(usersPath)
 
   users.push(user)
 
-  await saveJsonFile(usersPath, users)
+  await saveJsonFile(usersPath, usersName, users)
 }
 export const selectUserByEmail = async (email: string): Promise<User | null> => {
-  const users = usersFromFile as User[]
+  const users = await readJsonFile<User[]>(usersPath)
 
   const filteredUser = users.filter((item) => {
     if (item.email === email) {
