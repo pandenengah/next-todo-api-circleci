@@ -2,6 +2,14 @@ import formidable from "formidable";
 import fs from "fs";
 
 const todoPath = 'images/todos'
+const swaggerPath = './swagger.json'
+
+export const saveSwaggerFile = async (text: string): Promise<void> => {
+  if (fs.existsSync(swaggerPath)) {
+    fs.unlinkSync(swaggerPath);
+  }
+  fs.writeFileSync(swaggerPath, text);
+}
 
 export const saveTodoFile = async (file: formidable.File): Promise<void> => {
   if (!fs.existsSync(todoPath)) {

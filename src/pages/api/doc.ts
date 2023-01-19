@@ -6,7 +6,7 @@ const swaggerHandler = withSwagger({
     info: {
       title: 'Todo API',
       description: 'With NextJS by Swagger',
-      version: '0.1.0',
+      version: '1.0.1',
     },
     components: {
       securitySchemes: {

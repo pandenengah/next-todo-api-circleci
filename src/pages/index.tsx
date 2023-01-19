@@ -18,7 +18,7 @@ export default function Home() {
       <main className={styles.main}>
         <div className={styles.description}>
           <p>
-            See Api Docs in /api-doc
+            See Api Docs in /api-docs
           </p>
           <div>
             <a
@@ -63,7 +63,7 @@ export default function Home() {
         <div className={styles.grid}>
           <div></div>
           <Link
-            href="/api-doc"
+            href="/api-docs"
             className={styles.card}
             >
             <h2 className={inter.className}>
