@@ -4,20 +4,8 @@ import fs from "fs";
 const todoPath = 'images/todos'
 const swaggerPath = './swagger.json'
 
-export const saveJsonFile = async <T>(path: string, name: string, obj: T): Promise<void> => {
-  if (!fs.existsSync(path)) {
-    fs.mkdirSync(path)
-  }
-  fs.writeFileSync(path + '/' + name, JSON.stringify(obj))
-}
-
-export const readJsonFile = async <T>(path: string): Promise<T> => {
-  if (!fs.existsSync(path)) {
-    return [] as T
-  }
-
-  const raw = fs.readFileSync(path, {encoding: 'utf-8'})
-  return JSON.parse(raw) as T
+export const saveJsonFile = async <T>(path: string, obj: T): Promise<void> => {
+  fs.writeFileSync(path, JSON.stringify(obj))
 }
 
 export const saveSwaggerFile = async (text: string): Promise<void> => {

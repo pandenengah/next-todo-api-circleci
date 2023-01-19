@@ -1,12 +1,13 @@
+import { sleep } from "@/libs/sleep";
 import { Todo } from "@/models/todo";
-import Redis from "ioredis";
+import todoFromFile from "./storages/todos.json"
+import { saveJsonFile } from "@/libs/file";
 
 
-const key = 'todos'
-const db = new Redis(process.env.REDIS_CONNECT_STR || '')
+const todosPath = './src/repositories/storages/todos.json'
 
 export const selectTodos = async (sortType: 'asc' | 'desc' = 'asc'): Promise<Todo[]> => {
-  const todos = await getTodos()
+  const todos = todoFromFile as Todo[]
 
   if (sortType === "desc") {
     return todos.sort(sortDesc)
@@ -14,14 +15,14 @@ export const selectTodos = async (sortType: 'asc' | 'desc' = 'asc'): Promise<Tod
   return todos.sort(sortAsc)
 }
 export const insertTodo = async (obj: Todo): Promise<void> => {
-  const todos = await getTodos()
+  const todos = todoFromFile as Todo[]
 
   todos.push(obj)
 
-  db.set(key, JSON.stringify(todos))
+  await saveJsonFile(todosPath, todos)
 }
 export const selectTodoById = async (id: string): Promise<Todo | null> => {
-  const todos = await getTodos()
+  const todos = todoFromFile as Todo[]
 
   const filtered = todos.filter((item) => {
     if (item.id === id) {
@@ -38,30 +39,23 @@ export const selectTodoById = async (id: string): Promise<Todo | null> => {
 }
 
 export const alterTodo = async (id: string, todo: Todo): Promise<void> => {
-  const todos = await getTodos()
+  const todos = todoFromFile as Todo[]
 
   const index = todos.findIndex((item) => item.id === id)
   todos[index] = todo
 
-  db.set(key, JSON.stringify(todos))
+  await saveJsonFile(todosPath, todos)
 }
 
 export const deleteTodo = async (id: string): Promise<void> => {
-  const todos = await getTodos()
+  const todos = todoFromFile as Todo[]
 
   const index = todos.findIndex((item) => item.id === id)
   todos.splice(index, 1)
 
-  db.set(key, JSON.stringify(todos))
+  await saveJsonFile(todosPath, todos)
 }
 
-const getTodos = async (): Promise<Todo[]> => {
-  let res = await db.get(key)
-  if (res) {
-    return JSON.parse(res)
-  }
-  return []
-}
 const sortAsc = (a: any, b: any) => {
   if (a.deadline < b.deadline) {
     return -1

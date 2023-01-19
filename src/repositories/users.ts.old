@@ -1,23 +1,24 @@
+import { saveJsonFile } from "@/libs/file";
 import { User } from "@/models/user";
-import { Redis } from "ioredis";
+import usersFromFile from "./storages/users.json"
 
-const key = 'users'
-const db = new Redis(process.env.REDIS_CONNECT_STR || '')
+
+const usersPath = './src/repositories/storages/users.json'
 
 export const selectUsers = async (): Promise<User[]> => {
-  const users = await getUsers()
+  const users = usersFromFile as User[]
 
   return users
 }
 export const insertUser = async (user: User): Promise<void> => {
-  const users = await getUsers()
+  const users = usersFromFile as User[]
 
   users.push(user)
 
-  db.set(key, JSON.stringify(users))
+  await saveJsonFile(usersPath, users)
 }
 export const selectUserByEmail = async (email: string): Promise<User | null> => {
-  const users = await getUsers()
+  const users = usersFromFile as User[]
 
   const filteredUser = users.filter((item) => {
     if (item.email === email) {
@@ -31,12 +32,4 @@ export const selectUserByEmail = async (email: string): Promise<User | null> => 
   }
 
   return null
-}
-
-const getUsers = async (): Promise<User[]> => {
-  let res = await db.get(key)
-  if (res) {
-    return JSON.parse(res)
-  }
-  return []
 }
