@@ -1,9 +1,10 @@
 import { saveJsonFile } from "@/libs/file";
 import { User } from "@/models/user";
 import usersFromFile from "./storages/users.json"
+import path from "path";
 
 
-const usersPath = './src/repositories/storages/users.json'
+const usersPath = path.join(process.cwd(), 'src/repositories/storages/users.json')
 
 export const selectUsers = async (): Promise<User[]> => {
   const users = usersFromFile as User[]

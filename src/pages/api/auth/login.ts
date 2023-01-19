@@ -1,4 +1,4 @@
-import { generateToken, verifyToken } from '@/libs/jwt';
+import { generateToken } from '@/libs/jwt';
 import { res400ValidationError } from '@/libs/response';
 import { LoginDto } from '@/models/dtos/login.dto';
 import { loginUserSchema } from '@/models/schemas/login-user.schema';
