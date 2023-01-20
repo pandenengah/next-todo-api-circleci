@@ -5,9 +5,10 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import formidable from "formidable";
 import { deleteTodoFile, getTodoFilePathWithName, saveTodoFile } from '@/libs/file'
 import { Todo } from '@/models/todo'
-import { v4 as uuidv4 } from 'uuid';
 import { editUserSchema } from '@/models/schemas/edit-user.schema'
 import { alterTodo, deleteTodo, selectTodoById } from '@/repositories/todos';
+import { allowCors } from '@/libs/validation';
+import cors from 'cors';
 
 
 // disable nextjs body parsing because of using multipart/formdata
@@ -21,6 +22,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ValidationError | void | TodoDto>
 ) {
+  await allowCors(req, res, cors())
+
   switch (req.method) {
     case "GET":
       await get(req, res)

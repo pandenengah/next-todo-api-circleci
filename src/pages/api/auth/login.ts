@@ -1,16 +1,20 @@
 import { generateToken } from '@/libs/jwt';
 import { res400ValidationError } from '@/libs/response';
+import { allowCors } from '@/libs/validation';
 import { LoginDto } from '@/models/dtos/login.dto';
 import { loginUserSchema } from '@/models/schemas/login-user.schema';
 import { ValidationError } from '@/models/validation-error';
 import { selectUserByEmail } from '@/repositories/users';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import cors from 'cors'
 
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<LoginDto | ValidationError | void>
 ) {
+  await allowCors(req, res, cors())
+
   switch (req.method) {
     /**
      * @swagger

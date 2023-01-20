@@ -1,4 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { allowCors } from '@/libs/validation'
+import cors from 'cors'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -18,9 +20,11 @@ type Data = {
  *         description: hello world
  */
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  await allowCors(req, res, cors())
+
   res.status(200).json({ name: 'John Doe' })
 }

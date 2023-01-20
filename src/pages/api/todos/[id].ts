@@ -7,7 +7,8 @@ import { deleteTodoFile, getTodoFilePathWithName, saveTodoFile } from '@/libs/fi
 import { Todo } from '@/models/todo'
 import { editUserSchema } from '@/models/schemas/edit-user.schema'
 import { alterTodo, deleteTodo, selectTodoById } from '@/repositories/todos';
-import { checkAuthorization } from '@/libs/validation';
+import { allowCors, checkAuthorization } from '@/libs/validation';
+import cors from 'cors';
 
 
 // disable nextjs body parsing because of using multipart/formdata
@@ -21,6 +22,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ValidationError | void | TodoDto>
 ) {
+  await allowCors(req, res, cors())
+
   switch (req.method) {
     case "GET":
       await get(req, res)

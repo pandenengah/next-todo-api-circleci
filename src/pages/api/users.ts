@@ -1,5 +1,7 @@
+import { allowCors } from '@/libs/validation';
 import { UserDto } from '@/models/dtos/user.dto'
 import { selectUsers } from '@/repositories/users';
+import cors from 'cors';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 
@@ -7,6 +9,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<UserDto[] | void>
 ) {
+  await allowCors(req, res, cors())
+
   switch (req.method) {
     /**
      * @swagger
