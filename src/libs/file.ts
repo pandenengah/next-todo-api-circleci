@@ -1,5 +1,6 @@
 import formidable from "formidable";
 import fs from "fs";
+import { randomNumber } from "./random";
 
 const todoPath = 'images/todos'
 const swaggerPath = './swagger.json'
@@ -13,6 +14,10 @@ export const saveSwaggerFile = async (text: string): Promise<void> => {
 }
 
 export const saveTodoFile = async (file: formidable.File): Promise<void> => {
+  if (process.env.IS_IN_SERVERLESS === 'true') {
+    return
+  }
+
   if (!fs.existsSync(`./public/${todoPath}`)) {
     fs.mkdirSync(`./public/${todoPath}`, { recursive: true })
   }
@@ -22,6 +27,10 @@ export const saveTodoFile = async (file: formidable.File): Promise<void> => {
 };
 
 export const getTodoFilePathWithName = (file: formidable.File): string => {
+  if (process.env.IS_IN_SERVERLESS === 'true') {
+    return `seed/${randomNumber(100, 999)}/144`
+  }
+
   return `${todoPath}/${file.newFilename}${getFileExtention(file.originalFilename || '')}`
 }
 
