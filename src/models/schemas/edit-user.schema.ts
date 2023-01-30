@@ -19,12 +19,14 @@ import { EditTodoDto } from "../dtos/edit-todo.dto";
  *         description:
  *           type: string
  *           maxLength: 100
+ *           description: "Max length : 100"
  *         done:
  *           type: boolean
  *         snapshootImage:
  *           type: string
  *           format: binary
- *           maxLength: 1024 * 10
+ *           maxSize: 1024 * 10
+ *           description: "Max size : 1024 * 10"
  */
 export const editUserSchema = Joi.object<EditTodoDto>({
   deadline: Joi.date().required(),

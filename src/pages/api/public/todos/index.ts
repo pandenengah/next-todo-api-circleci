@@ -8,7 +8,7 @@ import formidable from "formidable";
 import { getTodoFilePathWithName, saveTodoFile } from '@/libs/file'
 import { Todo } from '@/models/todo'
 import { v4 as uuidv4 } from 'uuid';
-import { insertTodo, selectTodos } from '@/repositories/todos'
+import { insertTodo, selectTodos, selectTodosByUserId } from '@/repositories/todos'
 import { allowCors } from '@/libs/validation'
 import cors from 'cors'
 
@@ -74,7 +74,7 @@ const get = async (
     return
   }
 
-  const todos = await selectTodos(validReq.sortType)
+  const todos = await selectTodosByUserId(null, validReq.sortType)
   const todosDto: TodoDto[] = todos.map((item) => {
     return {
       id: item.id,
@@ -82,6 +82,8 @@ const get = async (
       description: item.description,
       done: item.done,
       snapshootImage: item.snapshootImage,
+      userId: item?.userId || null,
+      user: null,
     } as TodoDto
   })
   res.status(200).json(todosDto)
@@ -184,6 +186,7 @@ const post = async (
       done: false,
       description: validReq.description,
       snapshootImage: snapshootImageName,
+      userId: null
     }
     await insertTodo(newTodo)
 
@@ -193,6 +196,8 @@ const post = async (
       done: newTodo.done,
       description: newTodo.description,
       snapshootImage: newTodo.snapshootImage,
+      userId: newTodo.userId,
+      user: null
     }
 
     res.status(201).json(todoDto)

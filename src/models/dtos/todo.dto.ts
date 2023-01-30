@@ -1,3 +1,5 @@
+import { UserDto } from "./user.dto"
+
 /**
  * @swagger
  * components:
@@ -18,6 +20,12 @@
  *         snapshootImage:
  *           type: string
  *           nullable: true
+ *         userId:
+ *           type: string
+ *           format: uuid
+ *           nullable: true
+ *         user:
+ *           $ref: "#/components/schemas/UserDto"
  */
 export interface TodoDto {
   id: string
@@ -25,4 +33,6 @@ export interface TodoDto {
   deadline: string
   done: boolean
   snapshootImage: string
+  userId: string | null
+  user: UserDto | null
 }

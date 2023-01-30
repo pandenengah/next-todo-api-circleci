@@ -8,9 +8,11 @@ import formidable from "formidable";
 import { getTodoFilePathWithName, saveTodoFile } from '@/libs/file'
 import { Todo } from '@/models/todo'
 import { v4 as uuidv4 } from 'uuid';
-import { insertTodo, selectTodos } from '@/repositories/todos'
+import { insertTodo, selectTodos, selectTodosByUserId } from '@/repositories/todos'
 import { allowCors, checkAuthorization } from '@/libs/validation'
 import cors from 'cors'
+import { selectUserById } from '@/repositories/users'
+import { UserDto } from '@/models/dtos/user.dto'
 
 
 // disable nextjs body parsing because of using multipart/formdata
@@ -84,7 +86,13 @@ const get = async (
     return
   }
 
-  const todos = await selectTodos(validReq.sortType)
+  const todos = await selectTodosByUserId(auth.result?.data?.id || null, validReq.sortType)
+  const user = await selectUserById(auth.result?.data?.id || '')
+  const userDto: UserDto = {
+    id: user?.id || '',
+    email: user?.email || '',
+    fullName: user?.fullName || ''
+  }
   const todosDto: TodoDto[] = todos.map((item) => {
     return {
       id: item.id,
@@ -92,6 +100,8 @@ const get = async (
       description: item.description,
       done: item.done,
       snapshootImage: item.snapshootImage,
+      userId: item.userId,
+      user: userDto,
     } as TodoDto
   })
   res.status(200).json(todosDto)
@@ -204,6 +214,7 @@ const post = async (
       done: false,
       description: validReq.description,
       snapshootImage: snapshootImageName,
+      userId: auth.result?.data?.id || null
     }
     await insertTodo(newTodo)
 
@@ -213,6 +224,8 @@ const post = async (
       done: newTodo.done,
       description: newTodo.description,
       snapshootImage: newTodo.snapshootImage,
+      userId: newTodo.userId,
+      user: null
     }
 
     res.status(201).json(todoDto)

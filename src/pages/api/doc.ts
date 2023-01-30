@@ -15,7 +15,7 @@ const swaggerHandler = withSwagger({
     info: {
       title: 'Todo API',
       description,
-      version: '1.0.1',
+      version: '1.0.2',
     },
     components: {
       securitySchemes: {

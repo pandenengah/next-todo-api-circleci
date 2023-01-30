@@ -84,6 +84,8 @@ const get = async (
     description: todo.description,
     done: todo.done,
     snapshootImage: todo.snapshootImage,
+    userId: todo.userId,
+    user: null
   }
   res.status(200).json(todoDto)
 }
@@ -204,6 +206,7 @@ const put = async (
       done: validReq.done,
       description: validReq.description,
       snapshootImage: snapshootImageName,
+      userId: null
     }
     await alterTodo(id + '', newTodo)
 

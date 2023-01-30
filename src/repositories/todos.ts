@@ -13,6 +13,15 @@ export const selectTodos = async (sortType: 'asc' | 'desc' = 'asc'): Promise<Tod
   }
   return todos.sort(sortAsc)
 }
+export const selectTodosByUserId = async (userId: string | null, sortType: 'asc' | 'desc' = 'asc'): Promise<Todo[]> => {
+  const todos = await getTodos()
+
+  const filtered = todos.filter((item) => item.userId == userId)
+  if (sortType === "desc") {
+    return filtered.sort(sortDesc)
+  }
+  return filtered.sort(sortAsc)
+}
 export const insertTodo = async (obj: Todo): Promise<void> => {
   const todos = await getTodos()
 

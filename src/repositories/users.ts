@@ -32,6 +32,22 @@ export const selectUserByEmail = async (email: string): Promise<User | null> => 
 
   return null
 }
+export const selectUserById = async (id: string): Promise<User | null> => {
+  const users = await getUsers()
+
+  const filteredUser = users.filter((item) => {
+    if (item.id === id) {
+      return true
+    }
+    return false
+  })
+
+  if (filteredUser.length > 0) {
+    return filteredUser[0]
+  }
+
+  return null
+}
 
 const getUsers = async (): Promise<User[]> => {
   let res = await db.get(key)

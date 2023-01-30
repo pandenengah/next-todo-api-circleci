@@ -9,6 +9,8 @@ import { editUserSchema } from '@/models/schemas/edit-user.schema'
 import { alterTodo, deleteTodo, selectTodoById } from '@/repositories/todos';
 import { allowCors, checkAuthorization } from '@/libs/validation';
 import cors from 'cors';
+import { selectUserById } from '@/repositories/users';
+import { UserDto } from '@/models/dtos/user.dto';
 
 
 // disable nextjs body parsing because of using multipart/formdata
@@ -86,12 +88,21 @@ const get = async (
     return
   }
 
+  const user = await selectUserById(todo.userId || '')
+  const userDto: UserDto = {
+    id: user?.id || '',
+    email: user?.email || '',
+    fullName: user?.fullName || ''
+  }
+
   const todoDto: TodoDto = {
     id: todo.id,
     deadline: todo.deadline,
     description: todo.description,
     done: todo.done,
     snapshootImage: todo.snapshootImage,
+    userId: todo.userId,
+    user: userDto
   }
   res.status(200).json(todoDto)
 }
@@ -220,6 +231,7 @@ const put = async (
       done: validReq.done,
       description: validReq.description,
       snapshootImage: snapshootImageName,
+      userId: auth.result?.data.id || null
     }
     await alterTodo(id + '', newTodo)
 

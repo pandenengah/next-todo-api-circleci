@@ -15,13 +15,16 @@ import { CreateTodoDto } from "../dtos/create-todo.dto";
  *         deadline:
  *           type: string
  *           format: date-time
+ *           description: "Min value : {datetimeNow}"
  *         description:
  *           type: string
  *           maxLength: 100
+ *           description: "Max length : 100"
  *         snapshootImage:
  *           type: string
  *           format: binary
  *           maxLength: 1024 * 10
+ *           description: "Max size : 1024 * 10"
  */
 export const createTodoSchema = Joi.object<CreateTodoDto>({
   deadline: Joi.date().min('now').required(),
