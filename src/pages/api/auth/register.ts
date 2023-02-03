@@ -1,9 +1,11 @@
 import { res400ValidationError } from '@/libs/response';
+import { allowCors } from '@/libs/validation';
 import { UserDto } from '@/models/dtos/user.dto'
 import { createUserSchema } from '@/models/schemas/create-user.schema';
 import { User } from '@/models/user';
 import { ValidationError } from '@/models/validation-error';
 import { insertUser, selectUserByEmail } from '@/repositories/users';
+import cors from 'cors';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,6 +14,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<UserDto | ValidationError | void>
 ) {
+  await allowCors(req, res, cors())
+
   switch (req.method) {
     /**
      * @swagger
