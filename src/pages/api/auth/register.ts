@@ -1,3 +1,4 @@
+import { doHash } from '@/libs/hash';
 import { res400ValidationError } from '@/libs/response';
 import { allowCors } from '@/libs/validation';
 import { UserDto } from '@/models/dtos/user.dto'
@@ -69,11 +70,13 @@ export default async function handler(
         return
       }
 
+      const passwordHashed = await doHash(validReq?.password)
+
       const newUser: User = {
         id: uuidv4(),
         email: validReq?.email || '',
         fullName: validReq?.fullName || '',
-        password: validReq?.password || '',
+        password: passwordHashed,
       }
       await insertUser(newUser)
 
